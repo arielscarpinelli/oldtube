@@ -2,6 +2,11 @@
 
 If your Samsung Smart TV removed the YouTube app from your SmartHub after the June 30 of 2017, you can install this replacement app. 
 
+![App screenshot: Search](/img/search.png)
+![App screenshot: Select](/img/select.jpg)
+![App screenshot: Play](/img/play.jpg)
+
+
 ## Installing on 2011/2012 firmware 
 
 If your SmartHub looks like this 
