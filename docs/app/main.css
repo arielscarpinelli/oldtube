@@ -17,6 +17,23 @@ body {
 	padding: 0;
 }
 
+.tab-section {
+	width: 1920px;
+	height: 980px;
+}
+
+nav {
+	font-size: 35px;
+	text-align: center;
+	padding-top: 13px;
+	padding-bottom: 13px;
+}
+
+nav a {
+	margin-right: 10px;
+	padding: 10px 20px;
+}
+
 .search-bar {
 	padding: 10px 20px;
 }
@@ -41,7 +58,11 @@ li {
 	padding: 10px 20px;
 }
 
-li.selected {
+.active {
+	border: 3px solid #D8A638;
+}
+
+.selected {
 	background: #D8A638;
 	color: black;
 }
