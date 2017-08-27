@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.samsung.com/">  
+  <cpname itemtype="string"/>  
+  <cplogo itemtype="string"/>  
+  <cpauthjs itemtype="string"/>  
+  <ThumbIcon itemtype="string">img/logo_106_87.png</ThumbIcon>
+  <BigThumbIcon itemtype="string">img/logo_115_95.png</BigThumbIcon>
+  <ListIcon itemtype="string">img/logo_85_70.png</ListIcon>
+  <BigListIcon itemtype="string">img/logo_95_78.png</BigListIcon>
+  <category itemtype="string">Videos</category>  
+  <autoUpdate itemtype="boolean">y</autoUpdate>  
+  <ver itemtype="string">1.0.1</ver>  
+  <mgrver itemtype="string"/>  
+  <fullwidget itemtype="boolean">y</fullwidget>  
+  <type itemtype="string">user</type>  
+  <srcctl itemtype="boolean">y</srcctl>  
+  <ticker itemtype="boolean">n</ticker>  
+  <childlock itemtype="boolean">n</childlock>  
+  <videomute itemtype="boolean">n</videomute>  
+  <dcont itemtype="boolean">y</dcont>  
+  <widgetname itemtype="string">OldTube</widgetname>  
+  <description itemtype="string">A YouTube replacement app for legacy Samsung Smart TVs</description>  
+  <width itemtype="string">1920</width>  
+  <height itemtype="string">1080</height>  
+  <author itemtype="group"> 
+    <name itemtype="string">OldTube</name>  
+    <email itemtype="string">hello@oldtube.us</email>  
+    <link itemtype="string"/>  
+    <organization itemtype="string"/> 
+  </author> 
+</widget>

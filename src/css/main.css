@@ -1,0 +1,98 @@
+body {
+	font-size: 30px;
+	color: white;
+	background: #1D357C;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+.section {
+	width: 1920px;
+	height: 1080px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.tab-section {
+	width: 1920px;
+	height: 980px;
+}
+
+nav {
+	font-size: 35px;
+	text-align: center;
+	padding-top: 13px;
+	padding-bottom: 13px;
+}
+
+nav a {
+	margin-right: 10px;
+	padding: 10px 20px;
+}
+
+.search-bar {
+	padding: 10px 20px;
+}
+
+input {
+	width: 30%;
+	font-size: 30px;
+	padding: 10px 16px;
+	height: 60px;
+	line-height: 1.3333333;
+	border-radius: 10px;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	margin: 0;
+	padding: 10px 20px;
+}
+
+.active {
+	border: 3px solid #D8A638;
+}
+
+.selected {
+	background: #D8A638;
+	color: black;
+}
+
+h2 {
+	margin: 0;
+	width: 1500px;
+ 	white-space: nowrap;
+ 	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.thumb {
+	width: 320px;
+	text-align: center;
+}
+
+.thumb img {
+	max-width: 100%;
+	max-height: 180px; 
+}
+
+.pull-left {
+	float: left;
+	margin-right: 20px;
+}
+
+.clearfix::after { 
+   content: " ";
+   display: block; 
+   height: 0; 
+   clear: both;
+}
