@@ -9,4 +9,6 @@ Check docs at [oldtube.us](http://oldtube.us)
 
 Check the corresponding platform notes in util/*/README.md for running the emulator.
 
+`npm install` the first time
+
 Run `npm start` to compile and serve
