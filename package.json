@@ -21,6 +21,7 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "es5-shim": "^4.5.9",
+    "promise-polyfill": "^6.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "superagent": "^3.5.2"
