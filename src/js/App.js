@@ -83,7 +83,7 @@ export default class App extends React.Component {
         return (<div>
             {player}
             {channel}
-            <Tabs ref={ref => this.tabs = ref} style={{display: (player || channel) ? "none" : null}} onKeyReturn={this.exit}>
+            <Tabs ref={ref => this.tabs = ref} className="section" style={{display: (player || channel) ? "none" : null}} onKeyReturn={this.exit}>
                 <Search name="Search" onVideoSelected={this.onVideoSelected} language={this.preferences.lang} />
                 <Subscriptions name="Subscriptions" onVideoSelected={this.onVideoSelected} />
                 <MyYoutube name="My YouTube" onVideoSelected={this.onVideoSelected} />

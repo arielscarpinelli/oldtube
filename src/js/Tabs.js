@@ -31,6 +31,8 @@ export default class Tabs extends React.Component {
             let childRef = this.getSelectedTabRef();
             if (childRef && childRef.focus) {
                 childRef.focus();
+            } else {
+                this.focus();
             }
         }
 
@@ -72,10 +74,26 @@ export default class Tabs extends React.Component {
         }
     };
 
+    onKeyReturn = () => {
+        this.setState({
+            focused: false
+        });
+        this.props.onKeyReturn();
+    };
+
+    onKeyUp = () => {
+        if (this.props.onKeyUp) {
+            this.setState({
+                focused: false
+            });
+            this.props.onKeyUp();
+        }
+    };
+
     render() {
         let selectedTabClassName = this.state.focused ? "selected" : "active";
         let children = React.Children.toArray(this.props.children);
-        return (<div className="section" style={this.props.style}>
+        return (<div className={this.props.className} style={this.props.style}>
             <RemoteControlListener
                 ref={ref => this.remoteControlListener = ref}
                 autofocus={false}
@@ -83,7 +101,8 @@ export default class Tabs extends React.Component {
                 onKeyRight={this.onKeyRight}
                 onKeyDown={this.onKeyDownOrEnter}
                 onKeyEnter={this.onKeyDownOrEnter}
-                onKeyReturn={this.props.onKeyReturn}
+                onKeyReturn={this.onKeyReturn}
+                onKeyUp={this.onKeyUp}
             />
             <nav>
                 {children.map((child, index) =>

@@ -131,7 +131,7 @@ export default class List extends React.Component {
         if (this.props.loading) {
             return <div style={{padding: "10px"}}><LoadingIndicator/></div>
         } else if (this.props.error) {
-            return <div style={{padding: "10px"}}>Failed to search for videos. Please try again. (Error: {this.state.error})</div>
+            return <div style={{padding: "10px"}}>Failed to search for videos. Please try again. (Error: {this.props.error})</div>
         }
         return <ul style={{position: "absolute", top: this.state.scrollPosition, width: "100%"}}>
             {this.props.items.map(this.renderItem)}
@@ -139,9 +139,18 @@ export default class List extends React.Component {
     }
 
     render() {
+
+        let style = {
+            position: "relative",
+            overflow: "hidden",
+            width: "100%",
+            height: "100%",
+            ...this.props.style
+        };
+
         return (
             <div ref={ref => this.container = ref}
-                 style={{position: "relative", overflow: "hidden", width: "100%", height: "100%"}}>
+                 style={style}>
                 <RemoteControlListener
                     ref={ref => this.remoteControlListener = ref}
                     autofocus={this.props.autofocus}

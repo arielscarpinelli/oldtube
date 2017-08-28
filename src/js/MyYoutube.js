@@ -1,17 +1,18 @@
 import config from './config';
 import LoggedInSection from './LoggedInSection';
+import Playlist from './Playlist';
 import React from 'react';
 import request from 'superagent';
 import session from './YoutubeSession';
+import Tabs from './Tabs';
 import VideoList from './VideoList';
 
-class MyYoutube extends React.Component {
+class MyPlaylists extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            items: []
+            loading: true
         }
     }
 
@@ -53,22 +54,57 @@ class MyYoutube extends React.Component {
                         this.props.onAuthError();
                     }
                 }
-                this.setState(state => {
-                    return {
-                        error: err,
-                        items: [].concat(state.items, items && items.map(item => {
-                            item.id = {
-                                kind: "youtube#playlist",
-                                playlistId: item.id
-                            };
-                            item.key = JSON.stringify(item.id);
-                            return item;
-                        })),
-                        loading: false
-                    }
-                })
+                this.setState({
+                    error: err,
+                    items: items && items.map(item => {
+                        item.id = {
+                            kind: "youtube#playlist",
+                            playlistId: item.id
+                        };
+                        item.key = JSON.stringify(item.id);
+                        return item;
+                    }),
+                    loading: false
+                });
             });
 
+    }
+
+    render() {
+        return <VideoList
+            style={this.props.style}
+            listRef={ref => this.listRef = ref}
+            loading={this.state.loading}
+            error={this.state.error}
+            items={this.state.items}
+            onVideoSelected={this.props.onVideoSelected}
+            onReturn={this.onReturn}
+            onSelectBeforeFirst={this.props.onTabsFocus}
+        />
+
+    }
+
+}
+
+class MyYoutube extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            relatedPlaylists: {}
+        }
+    }
+
+    canFocus() {
+        return true;
+    }
+
+    focus() {
+        this.tabsRef.focusOnSelectedTab();
+    }
+
+    componentDidMount() {
         this.mine = request
             .get('https://www.googleapis.com/youtube/v3/channels')
             .query({
@@ -91,88 +127,27 @@ class MyYoutube extends React.Component {
                     }
                 }
 
-                let relatedPlaylists = [];
-                items && items.forEach(channel => {
+                console.log(JSON.stringify(res.body));
 
-                    const itemLists = channel.contentDetails.relatedPlaylists;
-
-                    relatedPlaylists.push({
-                        id: {
-                            kind: "youtube#playlist",
-                            playlistId: itemLists.watchLater
-                        },
-                        key: itemLists.watchLater,
-                        snippet: {
-                            title: "Watch Later"
-                        }
-                    });
-
-                    relatedPlaylists.push({
-                        id: {
-                            kind: "youtube#playlist",
-                            playlistId: itemLists.watchHistory
-                        },
-                        key: itemLists.watchHistory,
-                        snippet: {
-                            title: "Recently Watched"
-                        }
-                    });
-
-                    relatedPlaylists.push({
-                        id: {
-                            kind: "youtube#playlist",
-                            playlistId: itemLists.favorites
-                        },
-                        key: itemLists.favorites,
-                        snippet: {
-                            title: "Favorites"
-                        }
-                    });
-
-                    relatedPlaylists.push({
-                        id: {
-                            kind: "youtube#playlist",
-                            playlistId: itemLists.uploads
-                        },
-                        key: itemLists.uploads,
-                        snippet: {
-                            title: "Uploads"
-                        }
-                    });
-
-                    relatedPlaylists.push({
-                        id: {
-                            kind: "youtube#playlist",
-                            playlistId: itemLists.likes
-                        },
-                        key: itemLists.likes,
-                        snippet: {
-                            title: "Liked"
-                        }
-                    });
-
+                this.setState({
+                    error: err,
+                    relatedPlaylists: (items && items[0] && items[0].contentDetails.relatedPlaylists) || {},
+                    loading: false
                 });
-
-                this.setState(state => {
-                    return {
-                        error: err,
-                        items: [].concat(relatedPlaylists, state.items),
-                        loading: false
-                    }
-                })
-            });
+            })
     }
 
     render() {
-        return <VideoList
-            listRef={ref => this.listRef = ref}
-            loading={this.state.loading}
-            error={this.state.error}
-            items={this.state.items}
-            onVideoSelected={this.props.onVideoSelected}
-            onReturn={this.onReturn}
-            onSelectBeforeFirst={this.props.onTabsFocus}
-        />
+        const relatedPlaylists = this.state.relatedPlaylists;
+        return <Tabs className="tab-section" ref={ref => this.tabsRef = ref} onKeyUp={this.props.onTabsFocus} onKeyReturn={this.props.onTabsFocus}>
+            <MyPlaylists name="Playlists" onVideoSelected={this.props.onVideoSelected}/>
+            {!relatedPlaylists.uploads ? null :
+                <Playlist name="Uploads" playlistId={relatedPlaylists.uploads} onVideoSelected={this.props.onVideoSelected}/>}
+            {!relatedPlaylists.likes ? null :
+                <Playlist name="Liked" playlistId={relatedPlaylists.likes} onVideoSelected={this.props.onVideoSelected}/>}
+            {!relatedPlaylists.favorites ? null :
+                <Playlist name="Favorites" playlistId={relatedPlaylists.favorites} onVideoSelected={this.props.onVideoSelected}/>}
+        </Tabs>
 
     }
 
@@ -181,16 +156,16 @@ class MyYoutube extends React.Component {
 export default class LoggedInMyYoutube extends React.Component {
 
     canFocus() {
-        return this.playlistsRef && this.playlistsRef.canFocus();
+        return true;
     }
 
     focus() {
-        return this.playlistsRef && this.playlistsRef.focus();
+        return this.myYoutubeRef && this.myYoutubeRef.focus();
     }
 
     render() {
-        return <LoggedInSection className="tab-section subscriptions" style={this.props.style}>
-            <MyYoutube ref={ref => this.playlistsRef = ref} {...this.props}/>
+        return <LoggedInSection className="tab-section my-youtube" style={this.props.style}>
+            <MyYoutube ref={ref => this.myYoutubeRef = ref} {...this.props}/>
         </LoggedInSection>
     }
 
