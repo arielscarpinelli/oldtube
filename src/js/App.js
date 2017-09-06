@@ -4,7 +4,6 @@ import MyYoutube from './MyYoutube';
 import React from 'react';
 import Search from './Search';
 import Settings from './Settings';
-import Subscriptions from './Subscriptions';
 import Tabs from './Tabs';
 import VideoPlayer from './VideoPlayer';
 
@@ -85,7 +84,6 @@ export default class App extends React.Component {
             {channel}
             <Tabs ref={ref => this.tabs = ref} className="section" style={{display: (player || channel) ? "none" : null}} onKeyReturn={this.exit}>
                 <Search name="Search" onVideoSelected={this.onVideoSelected} language={this.preferences.lang} />
-                <Subscriptions name="Subscriptions" onVideoSelected={this.onVideoSelected} />
                 <MyYoutube name="My YouTube" onVideoSelected={this.onVideoSelected} />
                 <Settings name="Settings"/>
             </Tabs>

@@ -66,7 +66,7 @@ export default class RemoteControlListener extends React.Component {
             case tvKey.KEY_RETURN:
                 console.log("key return");
                 if (this.props.onKeyReturn) {
-                    event.preventDefault();
+                    event && event.preventDefault && event.preventDefault();
                     this.props.onKeyReturn(event);
                 }
                 break;
