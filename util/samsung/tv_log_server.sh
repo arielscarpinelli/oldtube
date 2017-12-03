@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nc -l 45634
+while true; do nc -l 45634; done
