@@ -9,7 +9,7 @@ function VideoItemRenderer(props) {
     const playlist = !item.id.playlistId ? null : "Playlist";
     const channel = !item.id.channelId ? null : "Channel";
 
-    return (<div>
+    return (<div className="video-item">
         <div className="pull-left thumb">
             <img src={thumb.url}/>
         </div>

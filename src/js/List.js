@@ -99,7 +99,7 @@ export default class List extends React.Component {
         let selectedItem = this.props.items[this.state.selectedIndex];
         if (selectedItem) {
             this.props.onItemSelected(selectedItem,
-                this.props.items.slice(this.props.selectedIndex + 1));
+                this.props.items.slice(this.state.selectedIndex + 1));
         }
     };
 

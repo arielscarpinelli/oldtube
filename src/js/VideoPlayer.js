@@ -1,161 +1,201 @@
 import React from 'react';
 import RemoteControlListener from './RemoteControlListener';
 
-export default class VideoPlayer extends React.Component {
+export default class VideoPlayer extends React.PureComponent {
 
-    componentDidMount() {
-        if (!YT) {
-            console.log("we are doomed, no YT API!")
-        } else {
-            this.yt = new YT.Player('player', {
-                events: {
-                    'onReady': this.onPlayerReady,
-                    'onStateChange': this.onPlayerStateChange,
-                    'onError': this.onError,
-                }
-            });
-        }
-    }
+	constructor(props) {
+		super(props);
 
-    onPlayerReady = (event) => {
-        ga && ga('send', 'event', 'video', 'unstarted');
-    };
+		this.state = {
+			currentVideo: 0,
+			currentTime: 0,
+			duration: 0,
+			progressBarVisible: true
+		}
+	}
 
-    onPlayerStateChange = (event) => {
-        switch (event.data) {
-            case YT.PlayerState.UNSTARTED:
-                console.log("player state change: unstarted");
-                ga && ga('send', 'event', 'video', 'unstarted');
-                break;
+	componentWillReceiveProps() {
+		this.setState({
+			currentVideo: 0,
+			currentTime: 0,
+			duration: 0,
+			progressBarVisible: true
+		})
+	}
 
-            case YT.PlayerState.ENDED:
-                console.log("player state change: ended");
-                this.toggleScreenSaver(true);
-                this.props.onReturn(null);
+	onPlayerReady = (event) => {
+		ga && ga('send', 'event', 'video', 'unstarted');
+		this.showAndUpdateProgress();
+	};
 
-            case YT.PlayerState.PLAYING:
-                console.log("player state change: playing");
-                this.toggleScreenSaver(false);
-                break;
+	showAndUpdateProgress(fadeOutAfter) {
+		if (this.videoRef) {
+			this.setState({
+				currentTime: this.videoRef.currentTime,
+				duration: this.videoRef.duration,
+				progressBarVisible: true
+			});
+			if (fadeOutAfter) {
+				setTimeout(() => {
+					this.setState({
+						progressBarVisible: false
+					})
+				}, 2000)
+			}
+		}
+	}
 
-            case YT.PlayerState.PAUSED:
-                console.log("player state change: paused");
-                this.toggleScreenSaver(true);
-                break;
+	onTimeUpdate = () => {
+		this.setState({
+			currentTime: this.videoRef.currentTime,
+			duration: this.videoRef.duration
+		});
+	};
 
-            case YT.PlayerState.CUED:
-                console.log("player state change: cued");
-                break;
+	onPlayerPlaying = (event) => {
+		console.log("player state change: playing");
+		this.toggleScreenSaver(false);
+		this.showAndUpdateProgress(true);
+	};
 
-            default:
-                console.log("player state change: " + event.data);
-                break;
-        }
-    };
+	onPlayerPaused = (event) => {
+		console.log("player state change: paused");
+		this.toggleScreenSaver(true);
+		this.showAndUpdateProgress(false);
+	};
 
-    onError = (event) => {
-        console.log(event.data)
-    };
+	onError = (event) => {
+		console.log(event.data)
+	};
 
-    componentDidUpdate() {
-        this.remoteControlListener.focus();
-    }
+	componentDidUpdate() {
+		this.remoteControlListener.focus();
+	}
 
-    onKeyPlay = () => {
-        this.yt && this.yt.playVideo();
-    };
+	onKeyPlay = () => {
+		this.videoRef && this.videoRef.play();
+	};
 
-    onKeyPause = () => {
-        this.yt && this.yt.pauseVideo()
-    };
+	onKeyPause = () => {
+		if (this.videoRef) {
+			if (!this.videoRef.paused) {
+				this.videoRef.pause();
+			} else {
+				this.videoRef.play();
+			}
+		}
+	};
 
-    onKeyStop = () => {
-        this.yt && this.yt.stopVideo();
-    };
+	onKeyStop = () => {
+		if (this.videoRef) {
+			this.videoRef.pause();
+			this.videoRef.currentTime = 0;
+			this.showAndUpdateProgress(false);
+		}
+	};
 
-    onKeyRw = () => {
-        this.yt && this.yt.seekTo(this.yt.getCurrentTime() - 10);
-    };
+	onKeyRw = () => {
+		if (this.videoRef) {
+			this.videoRef.currentTime = Math.max(0, this.videoRef.currentTime - 10);
+			this.showAndUpdateProgress(!this.videoRef.paused);
+		}
+	};
 
-    onKeyFF = () => {
-        this.yt && this.yt.seekTo(this.yt.getCurrentTime() + 10);
-    };
+	onKeyFF = () => {
+		if (this.videoRef) {
+			this.videoRef.currentTime = Math.min(this.videoRef.duration, this.videoRef.currentTime + 10);
+			this.showAndUpdateProgress(!this.videoRef.paused);
+		}
+	};
 
-    onKeyRewind = () => {
-        this.yt && this.yt.previousVideo();
-    };
+	onKeyRewind = () => {
+		if (this.state.currentVideo > 0) {
+			this.setState({
+				currentVideo: this.state.currentVideo - 1,
+				currentTime: 0,
+				duration: 0
+			})
+		}
+	};
 
-    onKeyFastForward = () => {
-        this.yt && this.yt.nextVideo();
-    };
+	onKeyFastForward = () => {
+		if (this.hasMoreVideosInPlaylist()) {
+			this.setState({
+				currentVideo: this.state.currentVideo + 1,
+				currentTime: 0,
+				duration: 0
+			})
+		}
+	};
 
-    onKeyVolUp = () => {
-        deviceapis.audiocontrol.setVolumeUp();
-    };
+	hasMoreVideosInPlaylist() {
+		return this.state.currentVideo <= this.props.playlistVideoIds.length;
+	}
 
-    onKeyVolDown = () => {
-        deviceapis.audiocontrol.setVolumeDown();
-    };
+	onKeyVolUp = () => {
+		deviceapis.audiocontrol.setVolumeUp();
+	};
 
-    onKeyReturn = (event) => {
-        this.toggleScreenSaver(true);
-        this.props.onReturn(event);
-    };
+	onKeyVolDown = () => {
+		deviceapis.audiocontrol.setVolumeDown();
+	};
 
-    getVideoUrl() {
-        let youtubeId = this.props.youtubeId;
-        let videoId = "";
-        let listParams = "";
+	onKeyReturn = (event) => {
+		this.toggleScreenSaver(true);
+		this.props.onReturn(event);
+	};
 
-        console.log(youtubeId.kind);
+	getVideoUrl() {
+		let videoId = (this.state.currentVideo === 0) ?
+			this.props.youtubeId.videoId :
+			this.props.playlistVideoIds[this.state.currentVideo - 1];
 
-        switch(youtubeId.kind) {
-            case "youtube#video":
-                videoId = youtubeId.videoId;
-                listParams = "&playlist=" + (this.props.playlistVideoIds || []).join(',');
-                break;
-            case "youtube#playlist":
-                listParams = "&listType=playlist&list=" + youtubeId.playlistId;
-                break;
-        }
+		return `https://api.unblockvideos.com/youtube_downloader?id=${videoId}&selector=mp4&redirect=true`;
+	};
 
-        return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1${listParams}`;
-    };
+	toggleScreenSaver(enabled) {
+		webapis && webapis.appcommon && webapis.appcommon.setScreenSaver && webapis.appcommon.setScreenSaver(
+			enabled ? webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_ON :
+				webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_OFF,
+			function (result) {
+				console.log(result);
+			}, function (error) {
+				console.log(JSON.stringify(error));
+			}
+		);
+	}
 
-    toggleScreenSaver(enabled) {
-        webapis && webapis.appcommon && webapis.appcommon.setScreenSaver && webapis.appcommon.setScreenSaver(
-            enabled ? webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_ON : 
-                webapis.appcommon.AppCommonScreenSaverState.SCREEN_SAVER_OFF,
-            function(result) {
-                console.log(result);
-            }, function(error) {
-                console.log(JSON.stringify(error));
-            }
-        );
-    }
-
-    render() {
-        let videoUrl = this.getVideoUrl();
-        return (<div className="section">
-            <RemoteControlListener
-                ref={ref => this.remoteControlListener = ref}
-                onKeyPlay={this.onKeyPlay}
-                onKeyPause={this.onKeyPause}
-                onKeyStop={this.onKeyStop}
-                onKeyRw={this.onKeyRw}
-                onKeyFF={this.onKeyFF}
-                onKeyRewind={this.onKeyRewind}
-                onKeyFastForward={this.onKeyFastForward}
-                onKeyVolUp={this.onKeyVolUp}
-                onKeyVolDown={this.onKeyVolDown}
-                onKeyReturn={this.onKeyReturn}
-            />
-            <iframe id="player" style={{width: "100%", height: "100%"}}
-                    src={videoUrl}
-                    frameBorder="0"
-                    allowFullScreen>
-            </iframe>
-        </div>)
-    }
+	render() {
+		let videoUrl = this.getVideoUrl();
+		return (<div className="section">
+			<RemoteControlListener
+				ref={ref => this.remoteControlListener = ref}
+				onKeyPlay={this.onKeyPlay}
+				onKeyPause={this.onKeyPause}
+				onKeyStop={this.onKeyStop}
+				onKeyRw={this.onKeyRw}
+				onKeyFF={this.onKeyFF}
+				onKeyRewind={this.onKeyRewind}
+				onKeyFastForward={this.onKeyFastForward}
+				onKeyVolUp={this.onKeyVolUp}
+				onKeyVolDown={this.onKeyVolDown}
+				onKeyReturn={this.onKeyReturn}
+			/>
+			<video ref={videoRef => this.videoRef = videoRef}
+				   style={{width: "100%", height: "100%"}}
+				   src={videoUrl}
+				   autoPlay={true}
+				   onLoadedData={this.onPlayerReady}
+				   onPlaying={this.onPlayerPlaying}
+				   onPause={this.onPlayerPaused}
+				   onEnded={this.onPlayerEnded}
+				   onError={this.onError}
+				   onTimeUpdate={this.onTimeUpdate}>
+			</video>
+			<div className={"progress-bar " + (!this.state.progressBarVisible ? "fade-out" : "")}>
+				<progress max={this.state.duration} value={this.state.currentTime}/>
+			</div>
+		</div>)
+	}
 
 }

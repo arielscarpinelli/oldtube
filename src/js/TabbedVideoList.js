@@ -22,9 +22,9 @@ export default class TabbedVideoList extends React.Component {
         }
     }
 
-    onReturn = () => {
+    onReturn = (event) => {
         this.listRef && this.listRef.select(-1);
-        this.props.onTabsFocus();
+        this.props.onTabsFocus(event);
     };
 
     setupDataRequest() {
@@ -36,8 +36,14 @@ export default class TabbedVideoList extends React.Component {
     }
 
     loadData() {
-        this.request = this.setupDataRequest()
-            .set({'Authorization': 'Bearer ' + session.getToken()})
+        let baseRequest = this.setupDataRequest();
+        if (!this.props.public) {
+            baseRequest = baseRequest
+                .set({'Authorization': 'Bearer ' + session.getToken()});
+
+        }
+
+        this.request = baseRequest
             .end((err, res) => {
                 let items = res.body.items;
                 if (err) {
@@ -80,6 +86,7 @@ export default class TabbedVideoList extends React.Component {
             onVideoSelected={this.props.onVideoSelected}
             onReturn={this.onReturn}
             onSelectBeforeFirst={this.props.onTabsFocus}
+            autofocus={this.props.autofocus}
         />
 
     }
