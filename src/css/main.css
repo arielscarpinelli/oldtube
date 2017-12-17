@@ -105,11 +105,23 @@ h2 {
    clear: both;
 }
 
+.video-title {
+	position: absolute;
+	top: 25px;
+	left: 20px;
+	right: 20px;
+	width: 1870px;
+	padding: 5px;
+	visibility: visible;
+	background-color:rgba(0, 0, 0, 0.5);
+}
+
+
 .progress-bar {
 	position: absolute;
 	bottom: 25px;
 	height: 30px;
-	width: 100%;
+	width: 1920px;
 	opacity: 0.6;
 	padding: 0 20px;
 	margin: 0;

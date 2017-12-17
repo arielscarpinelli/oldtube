@@ -24,6 +24,7 @@ export default class VideoPlayer extends React.PureComponent {
 	}
 
 	onPlayerReady = (event) => {
+		console.log("player ready");
 		ga && ga('send', 'event', 'video', 'unstarted');
 		this.showAndUpdateProgress();
 	};
@@ -50,6 +51,17 @@ export default class VideoPlayer extends React.PureComponent {
 			currentTime: this.videoRef.currentTime,
 			duration: this.videoRef.duration
 		});
+	};
+
+	onPlayerEnded = (event) => {
+		console.log("player state change: ended");
+		this.toggleScreenSaver(true);
+		if (this.hasMoreVideosInPlaylist()) {
+			this.onKeyFastForward();
+			this.onKeyPlay();
+		} else {
+			this.props.onReturn(null);
+		}
 	};
 
 	onPlayerPlaying = (event) => {
@@ -145,10 +157,14 @@ export default class VideoPlayer extends React.PureComponent {
 		this.props.onReturn(event);
 	};
 
-	getVideoUrl() {
-		let videoId = (this.state.currentVideo === 0) ?
-			this.props.youtubeId.videoId :
+	getCurrentVideoObject() {
+		return (this.state.currentVideo === 0) ?
+			this.props.youtubeId :
 			this.props.playlistVideoIds[this.state.currentVideo - 1];
+	}
+
+	getVideoUrl() {
+		let videoId = this.getCurrentVideoObject().videoId;
 
 		return `https://api.unblockvideos.com/youtube_downloader?id=${videoId}&selector=mp4&redirect=true`;
 	};
@@ -182,7 +198,7 @@ export default class VideoPlayer extends React.PureComponent {
 				onKeyReturn={this.onKeyReturn}
 			/>
 			<video ref={videoRef => this.videoRef = videoRef}
-				   style={{width: "100%", height: "100%"}}
+				   style={{position: "absolute", top: 0, left: 0, width: "1920px", height: "1080px"}}
 				   src={videoUrl}
 				   autoPlay={true}
 				   onLoadedData={this.onPlayerReady}
@@ -192,6 +208,7 @@ export default class VideoPlayer extends React.PureComponent {
 				   onError={this.onError}
 				   onTimeUpdate={this.onTimeUpdate}>
 			</video>
+			<h1 className={"video-title " + (!this.state.progressBarVisible ? "fade-out" : "")}>{this.getCurrentVideoObject().name}</h1>
 			<div className={"progress-bar " + (!this.state.progressBarVisible ? "fade-out" : "")}>
 				<progress max={this.state.duration} value={this.state.currentTime}/>
 			</div>

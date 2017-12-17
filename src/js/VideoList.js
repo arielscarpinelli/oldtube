@@ -28,8 +28,8 @@ export default function VideoList(props) {
         onItemSelected={function (selected, following) {
             console.log(JSON.stringify(selected.id));
             props.onVideoSelected(selected.id, following
-                .map(item => item.id.videoId)
-                .filter(videoId => videoId));
+                .map(item => item.id)
+                .filter(id => id.videoId));
 
         }}
         {...props}/>;
