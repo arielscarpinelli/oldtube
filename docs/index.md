@@ -60,3 +60,15 @@ I believe you should still have the YouTube option available. If you don't pleas
 # Support or Contact
 
 Tweet me at [@triforcexp](https://twitter.com/triforcexp)
+
+# Privacy Policy
+
+There is no personal information (including YT access tokens) stored in any server of mine. It is all always saved inside your own TV.
+
+If you happen to install the build distributed by me, it has Google Analytics on it for the purpose of me knowing how much people actually use this software. Feel free to opt out, download the code and install it yourself without GA if you don't agree. In no case personal information (like what you search in YT) is sent or stored anywhere outside YT itself. 
+
+# Terms and Conditions
+
+You are free to use, modify or distribute this software at will. I personally encourage you to do it so! :-D.
+YouTube API usage is subject to these TOS https://www.youtube.com/t/terms
+
