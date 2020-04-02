@@ -166,7 +166,7 @@ export default class VideoPlayer extends React.PureComponent {
 	getVideoUrl() {
 		let videoId = this.getCurrentVideoObject().videoId;
 
-		return `https://api.unblockvideos.com/youtube_downloader?id=${videoId}&selector=mp4&redirect=true`;
+		return `http://www.indiandesitools.com/download?format=mp4&url=https://www.youtube.com/watch?v=${videoId}`;
 	};
 
 	toggleScreenSaver(enabled) {
