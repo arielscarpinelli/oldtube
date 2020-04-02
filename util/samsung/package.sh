@@ -11,18 +11,12 @@ cd dist
 rm widget.zip
 rm widgetlist.xml
 rm index.html
+cp -f ../src/index.html .
 mkdir img
 cp ../resources/logo_*.png img/
+zip widget.zip  index.html ../widget.info ../config.xml img/* index.js main.css
 
 IP=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)
-
-if [ "$1" == "deploy" ]; then
-	sed -e 's/dist\//http:\/\/oldtube.us\/app\//g' ../index.html > index.html
-else
-	sed -e "s/dist\//http:\/\/$IP\/dist\//g" ../index.html > index.html
-fi
-
-zip widget.zip index.html ../widget.info ../config.xml img/*
 
 FILESIZE=$(stat -f%z "widget.zip")
 
@@ -43,7 +37,6 @@ if [ "$1" == "deploy" ]; then
   echo "Deploying"
   scp widgetlist.xml $3@$IP:$4/
   scp widget.zip $3@$IP:$4/
-  echo "Remember to deploy the js and css file by committing"
 else
   echo "Listen in $IP"
   sudo python -m SimpleHTTPServer 80
