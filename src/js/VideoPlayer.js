@@ -17,6 +17,7 @@ export default class VideoPlayer extends React.PureComponent {
 			duration: 0,
 			progressBarVisible: true,
 			videoUrl: null,
+			loadingVideoUrl: false,
 			error: null,
 		}
 	}
@@ -28,6 +29,7 @@ export default class VideoPlayer extends React.PureComponent {
 			duration: 0,
 			progressBarVisible: true,
 			videoUrl: null,
+			loadingVideoUrl: false,
 			error: null
 		})
 	}
@@ -139,8 +141,10 @@ export default class VideoPlayer extends React.PureComponent {
 			this.setState({
 				currentVideo: this.state.currentVideo - 1,
 				currentTime: 0,
-				duration: 0
-			})
+				duration: 0,
+				videoUrl: null,
+				loadingVideoUrl: false
+			}, this.loadVideoUrl)
 		}
 	};
 
@@ -149,8 +153,10 @@ export default class VideoPlayer extends React.PureComponent {
 			this.setState({
 				currentVideo: this.state.currentVideo + 1,
 				currentTime: 0,
-				duration: 0
-			})
+				duration: 0,
+				videoUrl: null,
+				loadingVideoUrl: false
+			}, this.loadVideoUrl)
 		}
 	};
 
@@ -177,28 +183,41 @@ export default class VideoPlayer extends React.PureComponent {
 			this.props.playlistVideoIds[this.state.currentVideo - 1];
 	}
 
-	loadVideoUrl() {
+	loadVideoUrl = () => {
 		let videoId = this.getCurrentVideoObject().videoId;
 
-		if (!videoId || this.state.videoUrl) {
+		if (!videoId || this.state.videoUrl || this.state.loadingVideoUrl) {
 			return;
 		}
 
 		console.log("ytdl getInfo " + videoId);
 
+		this.setState({
+			loadingVideoUrl: true
+		});
+
 		ytdl.getInfo("https://www.youtube.com/watch?v=" + videoId, (err, info) => {
 			if (err) {
 				console.log(JSON.stringify(err));
-				this.setState({error: "ytdl Error: " + JSON.stringify(err)});
+				this.setState({
+					error: "ytdl Error: " + JSON.stringify(err),
+					loadingVideoUrl: false
+				});
 			}
 
 			const format = ytdl.chooseFormat(info.formats, 'audioandvideo');
 
 			if (format) {
 				console.log("Video URL: " + format.url);
-				this.setState({videoUrl: format.url});
+				this.setState({
+					videoUrl: format.url,
+					loadingVideoUrl: false
+				});
 			} else {
-				this.setState({error: "No fitting format!"});
+				this.setState({
+					error: "No fitting format!",
+					loadingVideoUrl: false
+				});
 			}
 		});
 
