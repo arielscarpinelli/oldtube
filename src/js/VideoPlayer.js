@@ -1,6 +1,11 @@
 import React from 'react';
 import RemoteControlListener from './RemoteControlListener';
 
+import 'core-js/features/set';
+import 'core-js/features/map';
+import 'regenerator-runtime/runtime';
+import ytdl from 'ytdl-core';
+
 export default class VideoPlayer extends React.PureComponent {
 
 	constructor(props) {
@@ -10,16 +15,20 @@ export default class VideoPlayer extends React.PureComponent {
 			currentVideo: 0,
 			currentTime: 0,
 			duration: 0,
-			progressBarVisible: true
+			progressBarVisible: true,
+			videoUrl: null,
+			error: null,
 		}
 	}
 
-	componentWillReceiveProps() {
+	componentWillReceiveProps(nextProps) {
 		this.setState({
 			currentVideo: 0,
 			currentTime: 0,
 			duration: 0,
-			progressBarVisible: true
+			progressBarVisible: true,
+			videoUrl: null,
+			error: null
 		})
 	}
 
@@ -80,8 +89,13 @@ export default class VideoPlayer extends React.PureComponent {
 		console.log(event.data)
 	};
 
+	componentDidMount() {
+		this.loadVideoUrl();
+	}
+
 	componentDidUpdate() {
 		this.remoteControlListener.focus();
+		this.loadVideoUrl();
 	}
 
 	onKeyPlay = () => {
@@ -163,10 +177,31 @@ export default class VideoPlayer extends React.PureComponent {
 			this.props.playlistVideoIds[this.state.currentVideo - 1];
 	}
 
-	getVideoUrl() {
+	loadVideoUrl() {
 		let videoId = this.getCurrentVideoObject().videoId;
 
-		return `https://api.unblockvideos.com/youtube_downloader?id=${videoId}&selector=mp4&redirect=true`;
+		if (!videoId || this.state.videoUrl) {
+			return;
+		}
+
+		console.log("ytdl getInfo " + videoId);
+
+		ytdl.getInfo("https://www.youtube.com/watch?v=" + videoId, (err, info) => {
+			if (err) {
+				console.log(JSON.stringify(err));
+				this.setState({error: "ytdl Error: " + JSON.stringify(err)});
+			}
+
+			const format = ytdl.chooseFormat(info.formats, 'audioandvideo');
+
+			if (format) {
+				console.log("Video URL: " + format.url);
+				this.setState({videoUrl: format.url});
+			} else {
+				this.setState({error: "No fitting format!"});
+			}
+		});
+
 	};
 
 	toggleScreenSaver(enabled) {
@@ -182,7 +217,6 @@ export default class VideoPlayer extends React.PureComponent {
 	}
 
 	render() {
-		let videoUrl = this.getVideoUrl();
 		return (<div className="section">
 			<RemoteControlListener
 				ref={ref => this.remoteControlListener = ref}
@@ -199,7 +233,7 @@ export default class VideoPlayer extends React.PureComponent {
 			/>
 			<video ref={videoRef => this.videoRef = videoRef}
 				   style={{position: "absolute", top: 0, left: 0, width: "1920px", height: "1080px"}}
-				   src={videoUrl}
+				   src={this.state.videoUrl}
 				   autoPlay={true}
 				   onLoadedData={this.onPlayerReady}
 				   onPlaying={this.onPlayerPlaying}
@@ -209,6 +243,7 @@ export default class VideoPlayer extends React.PureComponent {
 				   onTimeUpdate={this.onTimeUpdate}>
 			</video>
 			<h1 className={"video-title " + (!this.state.progressBarVisible ? "fade-out" : "")}>{this.getCurrentVideoObject().name}</h1>
+			{this.state.error ? <div>Error: {this.state.error}</div> : null}
 			<div className={"progress-bar " + (!this.state.progressBarVisible ? "fade-out" : "")}>
 				<progress max={this.state.duration} value={this.state.currentTime}/>
 			</div>

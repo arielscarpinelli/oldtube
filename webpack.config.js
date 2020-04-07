@@ -1,4 +1,5 @@
-var path = require('path');
+const path = require('path');
+const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except');
 
 module.exports = {
   entry: './src/js/index.js',
@@ -8,7 +9,13 @@ module.exports = {
   },
   module: {
     rules: [
-      { test: /\.js$/, exclude: /node_modules/, loader: "babel-loader" },
+      { test: /\.js$/,
+        exclude: babelLoaderExcludeNodeModulesExcept([
+          'm3u8stream',
+          'miniget',
+          'ytdl-core'
+        ]),
+        loader: "babel-loader" },
       { test: /\.css$/, loader: "file-loader?name=[name].[ext]" }
     ]
   }
