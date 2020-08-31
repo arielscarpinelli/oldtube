@@ -1,11 +1,12 @@
-import shim from 'es5-shim'
+import es5shim from 'es5-shim'
+import es6shim from 'es6-shim'
+import values from 'object.values';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import Promise from 'promise-polyfill';
 
-if (!window.Promise) {
-    window.Promise = Promise;
+if (!Object.values) {
+    values.shim();
 }
 
 try {

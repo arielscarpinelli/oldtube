@@ -1,5 +1,6 @@
 import React from 'react';
 import RemoteControlListener from './RemoteControlListener';
+import { errorToString } from './util';
 
 import 'core-js/features/set';
 import 'core-js/features/map';
@@ -183,10 +184,10 @@ export default class VideoPlayer extends React.PureComponent {
 			this.props.playlistVideoIds[this.state.currentVideo - 1];
 	}
 
-	loadVideoUrl = () => {
+	loadVideoUrl = async () => {
 		let videoId = this.getCurrentVideoObject().videoId;
 
-		if (!videoId || this.state.videoUrl || this.state.loadingVideoUrl) {
+		if (!videoId || this.state.videoUrl || this.state.loadingVideoUrl || this.state.error) {
 			return;
 		}
 
@@ -196,17 +197,9 @@ export default class VideoPlayer extends React.PureComponent {
 			loadingVideoUrl: true
 		});
 
-		ytdl.getInfo("https://www.youtube.com/watch?v=" + videoId, (err, info) => {
-			if (err) {
-				console.log(JSON.stringify(err));
-				this.setState({
-					error: "ytdl Error: " + JSON.stringify(err),
-					loadingVideoUrl: false
-				});
-			}
-
+		try {
+			const info = await ytdl.getInfo("https://www.youtube.com/watch?v=" + videoId);
 			const format = ytdl.chooseFormat(info.formats, 'audioandvideo');
-
 			if (format) {
 				console.log("Video URL: " + format.url);
 				this.setState({
@@ -219,7 +212,13 @@ export default class VideoPlayer extends React.PureComponent {
 					loadingVideoUrl: false
 				});
 			}
-		});
+		} catch (err) {
+			console.log(errorToString(err));
+			this.setState({
+				error: "videoId: " + videoId + " ytdl error: " + errorToString(err),
+				loadingVideoUrl: false
+			});
+		}
 
 	};
 
@@ -262,7 +261,7 @@ export default class VideoPlayer extends React.PureComponent {
 				   onTimeUpdate={this.onTimeUpdate}>
 			</video>
 			<h1 className={"video-title " + (!this.state.progressBarVisible ? "fade-out" : "")}>{this.getCurrentVideoObject().name}</h1>
-			{this.state.error ? <div>Error: {this.state.error}</div> : null}
+			{this.state.error ? <pre>Error: {this.state.error}</pre> : null}
 			<div className={"progress-bar " + (!this.state.progressBarVisible ? "fade-out" : "")}>
 				<progress max={this.state.duration} value={this.state.currentTime}/>
 			</div>

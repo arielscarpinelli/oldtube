@@ -22,11 +22,12 @@
     "classnames": "^2.2.5",
     "core-js": "^3.6.4",
     "es5-shim": "^4.5.9",
-    "promise-polyfill": "^6.0.2",
+    "es6-shim": "^0.35.5",
+    "object.values": "^1.1.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "superagent": "^3.5.2",
-    "ytdl-core": "^2.0.1"
+    "ytdl-core": "^3.2.2"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
