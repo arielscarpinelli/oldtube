@@ -63,9 +63,11 @@ Tweet me at [@triforcexp](https://twitter.com/triforcexp)
 
 # Privacy Policy
 
-There is no personal information (including YT access tokens) stored in any server of mine. It is all always saved inside your own TV.
+There is no personal information (including access tokens, search queries, watched vides, etc.) sent nor stored in any server managed by me. All personal information is always stored ONLY in your own TV and sent directly to YouTube API.
 
-If you happen to install the build distributed by me, it has Google Analytics on it for the purpose of me knowing how much people actually use this software. Feel free to opt out, download the code and install it yourself without GA if you don't agree. In no case personal information (like what you search in YT) is sent or stored anywhere outside YT itself. 
+In order to be able to list your favourites, saved playlists, etc ("My YouTube" section) the app offers to login using your YouTube credentials. These credentials, along with any information retrieved using them is exchanged and stored only on your own TV and sent directly to YouTube API. 
+
+If you happen to install the app build distributed in the oldtube.us site, it has a Google Analytics tracking configured on it for the purpose of me knowing how much people actually use this software. Feel free to opt out by downloading the code and building your own version without GA setup if you don't agree. In no case personal information (like what you search in YT) is sent for tracking.
 
 # Terms and Conditions
 
