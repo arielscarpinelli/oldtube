@@ -29,7 +29,7 @@ export default class Tabs extends React.Component {
             this.remoteControlListener.focus();
         } else {
             let childRef = this.getSelectedTabRef();
-            if (childRef && childRef.focus) {
+            if (childRef && childRef.focus && (childRef.canFocus ? childRef.canFocus() : true)) {
                 childRef.focus();
             } else {
                 this.focus();
