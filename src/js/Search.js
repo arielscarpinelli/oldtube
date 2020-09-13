@@ -13,7 +13,8 @@ export default class Search extends React.Component {
         this.state = {
             items: [],
             loading: false,
-            error: null
+            error: null,
+            searchText: ""
         };
     }
 
