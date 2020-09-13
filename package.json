@@ -19,15 +19,15 @@
   },
   "homepage": "https://github.com/arielscarpinelli/oldtube#readme",
   "dependencies": {
-    "classnames": "^2.2.5",
-    "core-js": "^3.6.4",
-    "es5-shim": "^4.5.9",
+    "classnames": "^2.2.6",
+    "core-js": "^3.6.5",
+    "es5-shim": "^4.5.14",
     "es6-shim": "^0.35.5",
     "object.values": "^1.1.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
     "regenerator-runtime": "^0.13.7",
-    "superagent": "^3.5.2",
+    "superagent": "^3.8.3",
     "ytdl-core": "^3.2.2"
   },
   "devDependencies": {
