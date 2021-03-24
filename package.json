@@ -21,22 +21,21 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "core-js": "^3.6.5",
-    "es5-shim": "^4.5.14",
-    "es6-shim": "^0.35.5",
     "object.values": "^1.1.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "regenerator-runtime": "^0.13.7",
     "superagent": "^6.1.0",
-    "ytdl-core": "^3.2.2"
+    "ytdl-core": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "babel-loader": "^8.1.0",
-    "babel-loader-exclude-node-modules-except": "^1.0.3",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-syntax-bigint": "^7.8.3",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "babel-loader": "^8.1.0",
+    "babel-loader-exclude-node-modules-except": "^1.0.3",
     "file-loader": "^6.0.0",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"

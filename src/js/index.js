@@ -1,5 +1,4 @@
-import es5shim from 'es5-shim'
-import es6shim from 'es6-shim'
+import 'core-js';
 import values from 'object.values';
 import React from 'react';
 import ReactDOM from 'react-dom';

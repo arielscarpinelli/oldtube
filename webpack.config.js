@@ -25,5 +25,10 @@ module.exports = {
       },
       { test: /\.css$/, loader: "file-loader?name=[name].[ext]" }
     ]
+  },
+  resolve: {
+    alias: {
+      'url$': path.resolve(__dirname, 'src/js/url-polyfill.js'),
+    }
   }
 };
