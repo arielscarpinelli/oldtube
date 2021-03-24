@@ -25,28 +25,28 @@ export default class Channel extends React.Component {
                 key: config.youTubeApiKey,
                 channelId: this.props.channelId,
                 order: "date"
-            })
-            .end((err, res) => {
-                let items = res.body.items;
-                if (err) {
-                    console.log(err);
-                    console.log(JSON.stringify(res.body));
-                    if (res.body && res.body.error && res.body.error.message) {
-                        err = res.body.error.message
-                    }
-                    if (res.status === 401) {
-                        this.props.onAuthError();
-                    }
-                }
-                this.setState({
-                    error: err,
-                    items: items && items.map(item => {
-                        item.key = JSON.stringify(item.id);
-                        return item;
-                    }),
-                    loading: false
-                })
             });
+        this.searching.end((err, res) => {
+            let items = res.body.items;
+            if (err) {
+                console.log(err);
+                console.log(JSON.stringify(res.body));
+                if (res.body && res.body.error && res.body.error.message) {
+                    err = res.body.error.message
+                }
+                if (res.status === 401) {
+                    this.props.onAuthError();
+                }
+            }
+            this.setState({
+                error: err,
+                items: items && items.map(item => {
+                    item.key = JSON.stringify(item.id);
+                    return item;
+                }),
+                loading: false
+            })
+        });
     }
 
     render() {

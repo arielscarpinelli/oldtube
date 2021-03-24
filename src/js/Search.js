@@ -48,8 +48,8 @@ export default class Search extends React.Component {
                 //videoEmbeddable: "true" // this requires to filter only by videos,
                 relevanceLanguage: this.props.language,
                 q: value
-            })
-            .end((err, res) => {
+            });
+        this.searching.end((err, res) => {
                 let items = res.body.items;
                 if (err) {
                     console.log(err);

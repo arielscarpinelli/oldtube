@@ -68,11 +68,12 @@ class YoutubeSession {
     }
 
     _retrieveUserInfo() {
-        return request
-            .get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + this.getToken())
-            .end((err, res) => {
-                localStorage.setItem(SESSION_USER_INFO, JSON.stringify(res.body));
-            });
+        var req = request
+            .get('https://www.googleapis.com/oauth2/v3/userinfo?access_token=' + this.getToken());
+        req.end((err, res) => {
+            localStorage.setItem(SESSION_USER_INFO, JSON.stringify(res.body));
+        });
+        return req;
     }
 
     getUserInfo() {

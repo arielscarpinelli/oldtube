@@ -80,28 +80,28 @@ class MyYoutube extends React.Component {
                 key: config.youTubeApiKey,
                 mine: true
             })
-            .set({'Authorization': 'Bearer ' + session.getToken()})
-            .end((err, res) => {
-                let items = res.body.items;
-                if (err) {
-                    console.log(err);
-                    console.log(JSON.stringify(res.body));
-                    if (res.body && res.body.error && res.body.error.message) {
-                        err = res.body.error.message;
-                    }
-                    if (err.status === 401) {
-                        this.props.onAuthError();
-                    }
-                }
-
+            .set({'Authorization': 'Bearer ' + session.getToken()});
+        this.mine.end((err, res) => {
+            let items = res.body.items;
+            if (err) {
+                console.log(err);
                 console.log(JSON.stringify(res.body));
+                if (res.body && res.body.error && res.body.error.message) {
+                    err = res.body.error.message;
+                }
+                if (err.status === 401) {
+                    this.props.onAuthError();
+                }
+            }
 
-                this.setState({
-                    error: err,
-                    relatedPlaylists: (items && items[0] && items[0].contentDetails.relatedPlaylists) || {},
-                    loading: false
-                });
-            })
+            console.log(JSON.stringify(res.body));
+
+            this.setState({
+                error: err,
+                relatedPlaylists: (items && items[0] && items[0].contentDetails.relatedPlaylists) || {},
+                loading: false
+            });
+        })
     }
 
     render() {

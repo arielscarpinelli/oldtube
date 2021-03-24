@@ -36,36 +36,36 @@ export default class LoggedInSection extends React.Component {
         this.tokenRequest = request
             .post('https://accounts.google.com/o/oauth2/device/code')
             .send("client_id=" + config.oAuthClientId)
-            .send("scope=" + config.oAuthScope)
-            .end((err, res) => {
-                if (err) {
-                    console.log(err);
-                    console.log(JSON.stringify(res.body));
-                    if (res.body && res.body.error) {
-                        this.setState({
-                            error: res.body.error,
-                        });
-                    }
-                } else {
-                    console.log(JSON.stringify(res.body));
+            .send("scope=" + config.oAuthScope);
+        this.tokenRequest.end((err, res) => {
+            if (err) {
+                console.log(err);
+                console.log(JSON.stringify(res.body));
+                if (res.body && res.body.error) {
                     this.setState({
-                        authResponse: res.body
-                    }, () => {
-                        this.initTimeout = setTimeout(() => {
-                            if(!session.isValid()) {
-                                this.setState({
-                                    authResponse: null
-                                });
-                                this.initOAuthFlow();
-                            }
-                        }, this.state.authResponse.expires_in * 1000);
-
-                        this.checkInterval = setInterval(() => {
-                            this.pollAuthorization();
-                        }, this.state.authResponse.interval * 1000)
+                        error: res.body.error,
                     });
                 }
-            });
+            } else {
+                console.log(JSON.stringify(res.body));
+                this.setState({
+                    authResponse: res.body
+                }, () => {
+                    this.initTimeout = setTimeout(() => {
+                        if(!session.isValid()) {
+                            this.setState({
+                                authResponse: null
+                            });
+                            this.initOAuthFlow();
+                        }
+                    }, this.state.authResponse.expires_in * 1000);
+
+                    this.checkInterval = setInterval(() => {
+                        this.pollAuthorization();
+                    }, this.state.authResponse.interval * 1000)
+                });
+            }
+        });
     }
 
     clearCheckInterval() {
@@ -86,28 +86,28 @@ export default class LoggedInSection extends React.Component {
             .send("client_id=" + config.oAuthClientId)
             .send("client_secret=" + config.oAuthClientSecret)
             .send("code=" + this.state.authResponse.device_code)
-            .send("grant_type=http://oauth.net/grant_type/device/1.0")
-            .end((err, res) => {
-                if (err) {
-                    console.log(err);
-                    console.log(JSON.stringify(res.body));
-                    if (res.body && res.body.error) {
-                        if (!res.body.error === "authorization_pending") {
-                            this.setState({
-                                error: res.body.error_description,
-                            });
-                            this.clearCheckInterval();
-                        } else {
-                            console.log("auth pending");
-                        }
+            .send("grant_type=http://oauth.net/grant_type/device/1.0");
+        this.pollRequest.end((err, res) => {
+            if (err) {
+                console.log(err);
+                console.log(JSON.stringify(res.body));
+                if (res.body && res.body.error) {
+                    if (!res.body.error === "authorization_pending") {
+                        this.setState({
+                            error: res.body.error_description,
+                        });
+                        this.clearCheckInterval();
+                    } else {
+                        console.log("auth pending");
                     }
-                } else {
-                    console.log(JSON.stringify(res.body));
-                    session.save(res.body);
-                    this.forceUpdate();
-                    this.clearCheckInterval();
                 }
-            });
+            } else {
+                console.log(JSON.stringify(res.body));
+                session.save(res.body);
+                this.forceUpdate();
+                this.clearCheckInterval();
+            }
+        });
 
     }
 
