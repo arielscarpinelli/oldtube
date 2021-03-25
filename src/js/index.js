@@ -1,14 +1,25 @@
-import 'core-js';
-import values from 'object.values';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-
-if (!Object.values) {
-    values.shim();
-}
-
 try {
+
+    // We use require instead of imports here to be able to enclose it all in a try-catch for debugging purposes on the TV
+
+    const configurator = require('core-js/configurator');
+
+    configurator({
+        usePolyfill: ['Set', 'Promise', 'Object'], // polyfills will be used anyway
+    });
+
+    require('core-js/features/set');
+    require('core-js/features/promise');
+    require('core-js/features/object');
+    require('core-js/features/function');
+    require('core-js/features/array/find');
+    require('core-js/web/url');
+    require('core-js/web/url-search-params');
+
+    const React = require('react');
+    const ReactDOM = require('react-dom');
+
+    const App = require('./App').default;
 
     ReactDOM.render(<App/>, document.getElementById('root'));
 
@@ -58,7 +69,7 @@ try {
 
 } catch (err) {
     alert(err);
-    var widgetAPI = new Common.API.Widget();
+    const widgetAPI = new Common.API.Widget();
     widgetAPI.sendReadyEvent();
     document.write("<h1>Error:" + err + "</h1>");
 }
