@@ -23,7 +23,8 @@ class MyPlaylists extends TabbedVideoList {
     getItemId(item) {
         return {
             kind: "youtube#playlist",
-            playlistId: item.id
+            playlistId: item.id,
+            name: item.snippet && item.snippet.title
         };
     }
 
