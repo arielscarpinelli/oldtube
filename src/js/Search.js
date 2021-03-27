@@ -11,6 +11,7 @@ export default class Search extends React.Component {
         super(props);
         this.searching = null;
         this.state = {
+            displayEnterHint: false,
             items: [],
             loading: false,
             error: null
@@ -18,14 +19,24 @@ export default class Search extends React.Component {
     }
 
     onChange = () => {
-        let value = this.ime.getInputObj().value;
+        const value = this.ime.getInputObj().value;
+
+        this.setState({
+            searchText: value,
+            displayEnterHint: value && value.trim().length && (!this.searching || this.searching.q !== value)
+        });
+
+    }
+
+    search = () => {
+        const value = this.ime.getInputObj().value;
 
         if (!value || !value.trim().length) {
             return
         }
 
         if (this.searching) {
-            if (this.searching.q == value) {
+            if (this.searching.q === value) {
                 // keep searching
                 return;
             } else {
@@ -35,7 +46,8 @@ export default class Search extends React.Component {
 
         this.setState({
             loading: true,
-            searchText: value
+            searchText: value,
+            displayEnterHint: false
         });
 
         this.searching = request
@@ -108,7 +120,7 @@ export default class Search extends React.Component {
 
     onImeEnter = () => {
         console.log("enter");
-        this.onChange();
+        this.search();
         this.listRef.focus();
         this.listRef.select(0);
     };
@@ -120,12 +132,14 @@ export default class Search extends React.Component {
 
     onImeKeyDown = () => {
         console.log("key down");
+        this.search();
         this.listRef.focus();
         this.listRef.select(0);
     };
 
     onImeKeyReturn = () => {
         console.log("key return");
+        this.search();
         this.props.onTabsFocus();
     };
 
@@ -138,8 +152,11 @@ export default class Search extends React.Component {
         return (
             <div className="tab-section search" style={this.props.style}>
                 <div className="search-bar">
-                    Search: <input id="searchText" type="text" placeholder="Search" value={this.state.searchText}
+                    <label>Search:</label>
+                        <input id="searchText" type="text" placeholder="Search" value={this.state.searchText}
                                onChange={() => {/* ignored, just to avoid a react warning, goes thru ime */}}/>
+                        {this.state.displayEnterHint ? <small>Press OK/enter to search</small> : null}
+
                 </div>
                 <VideoList
                     listRef={ref => this.listRef = ref}

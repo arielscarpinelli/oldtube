@@ -7,6 +7,7 @@ import Search from './Search';
 import Settings from './Settings';
 import Tabs from './Tabs';
 import VideoPlayer from './VideoPlayer';
+import Popup from "./Popup";
 
 const widgetAPI = new Common.API.Widget();
 
@@ -14,7 +15,9 @@ export default class App extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			displayUpdatePopup: false//props.legacyDomain
+		};
 
 		this.preferences = {};
 		let qstr = window.location.search;
@@ -102,11 +105,14 @@ export default class App extends React.Component {
 			{player}
 			{channel}
 			{playlist}
-			<Tabs ref={ref => this.tabs = ref} className="section" style={{display: (player || channel || playlist) ? "none" : null}} onKeyReturn={this.exit}>
+			{!this.state.displayUpdatePopup ? <Tabs ref={ref => this.tabs = ref} className="section" style={{display: (player || channel || playlist) ? "none" : null}} onKeyReturn={this.exit}>
 				<Search name="Search" onVideoSelected={this.onVideoSelected} language={this.preferences.lang}/>
 				<MyYoutube name="My YouTube" onVideoSelected={this.onVideoSelected}/>
 				<Settings name="Settings"/>
-			</Tabs>
+			</Tabs> : <Popup onClose={() => this.setState({displayUpdatePopup: false})}>
+				<p>OldTube is moving to oldtube.github.io</p>
+				<p>Please reinstall the app to keep receiving updates.</p>
+			</Popup>}
 		</div>);
 
 	}

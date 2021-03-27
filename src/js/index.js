@@ -1,5 +1,8 @@
 try {
 
+    const scripts = document.getElementsByTagName('script');
+    const legacyDomain = scripts[scripts.length-1].getAttribute("src").indexOf("oldtube.us") !== -1;
+
     // We use require instead of imports here to be able to enclose it all in a try-catch for debugging purposes on the TV
 
     const configurator = require('core-js/configurator');
@@ -21,7 +24,7 @@ try {
 
     const App = require('./App').default;
 
-    ReactDOM.render(<App/>, document.getElementById('root'));
+    ReactDOM.render(<App legacyDomain={legacyDomain}/>, document.getElementById('root'));
 
     window.onload = function() {
         var NNaviPlugin = document.getElementById("pluginObjectNNavi");
@@ -38,11 +41,11 @@ try {
     };
 
     // 2. This code loads the IFrame Player API code asynchronously.
-    let tag = document.createElement('script');
+    const tag = document.createElement('script');
 
     tag.src = "https://www.youtube.com/iframe_api";
 
-    let firstScriptTag = document.getElementsByTagName('script')[0];
+    const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -50,7 +53,7 @@ try {
         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    let GA_LOCAL_STORAGE_KEY = 'ga:clientId';
+    const GA_LOCAL_STORAGE_KEY = 'ga:clientId';
 
     ga('create', 'UA-102778294-1', {
         'storage': 'none',
@@ -58,12 +61,13 @@ try {
         'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
     });
     ga(function(tracker) {
-        var clientId = tracker.get('clientId');
+        const clientId = tracker.get('clientId');
         localStorage.setItem(GA_LOCAL_STORAGE_KEY, clientId);
         alert("GA clientId: " + clientId);
     });
 
     ga('set', 'checkProtocolTask', null); // Disable file protocol checking.
+    ga('set', 'legacyDomain', legacyDomain);
     ga('send', 'pageview');
 
 
