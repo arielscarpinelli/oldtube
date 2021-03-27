@@ -38,8 +38,23 @@ nav a {
 	padding: 10px 20px;
 }
 
-input {
+.search-bar input {
 	width: 30%;
+}
+
+.search-bar label {
+	width: 120px;
+	display: inline-block;
+}
+
+.search-bar small {
+	display: block;
+	padding-left: 120px;
+	padding-top: 10px;
+}
+
+
+input {
 	font-size: 30px;
 	padding: 10px 16px;
 	height: 60px;
@@ -150,5 +165,29 @@ progress::-webkit-progress-bar {
 progress::-webkit-progress-value {
 	background-color: #f00;
 	height: 100%;
+}
+
+.popup {
+	position: absolute;
+	width: 50%;
+	left: 25%;
+	right: 25%;
+	top: 300px;
+	font-size: 50px;
+	z-index: 100000;
+	background: black;
+	border: 2px solid gray;
+	padding: 20px;
+}
+
+.popup .buttons {
+	text-align: center;
+}
+
+.button {
+	background: #D8A638;
+	color: black;
+	padding: 10px;
+	text-decoration: none;
 }
 
