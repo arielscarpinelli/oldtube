@@ -135,7 +135,7 @@ export default class RemoteControlListener extends React.Component {
     };
 
     render() {
-        return (<a href="javascript:void(0);"
+        return (<a href="#"
            ref={anchor => this.keyboardAnchor = anchor}
            onKeyDown={this.onKeyDown}></a>)
     }

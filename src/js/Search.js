@@ -14,7 +14,8 @@ export default class Search extends React.Component {
             displayEnterHint: false,
             items: [],
             loading: false,
-            error: null
+            error: null,
+            searchText: ""
         };
     }
 
