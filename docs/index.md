@@ -54,7 +54,7 @@ If your SmartHub looks like this
 
 ## Installing on newer firmware 
 
-I believe you should still have the YouTube option available. If you don't please contact me so I can update these instructions. Meanwhile you can follow the pattern from [here](http://developer.samsung.com/tv/develop/legacy-platform-library/d20/index) or [here](http://developer.samsung.com/tv/develop/legacy-platform-library/art00121/index), setting up my app server IP `45.33.74.131`
+I believe you should still have the YouTube option available. If you don't please contact me so I can update these instructions. Meanwhile you can follow the pattern from [here](http://developer.samsung.com/tv/develop/legacy-platform-library/d20/index) or [here](http://developer.samsung.com/tv/develop/legacy-platform-library/art00121/index), setting up my app server IP `107.173.157.16`
 
 
 # Support or Contact
