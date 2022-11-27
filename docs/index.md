@@ -40,7 +40,7 @@ If your SmartHub looks like this
 
 ![set server ip menu](/img/set-ip-menu-2011.png)
 
-- Set it to `45.33.74.131`. Use the remote numeric buttons and advance with the right arrow. When you are done, press the `Return` button.
+- Set it to `107.173.157.16`. Use the remote numeric buttons and advance with the right arrow. When you are done, press the `Return` button.
 
 ![ip modal](/img/ip-modal-2011.png)
 
