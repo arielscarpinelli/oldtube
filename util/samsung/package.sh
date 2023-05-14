@@ -17,7 +17,7 @@ cp ../resources/logo_*.png img/
 IP=$(ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -1)
 
 if [ "$1" == "deploy" ]; then
-	sed -e 's/dist\//http:\/\/oldtube.us\/app\//g' ../index.html > index.html
+	sed -e 's/dist\//https:\/\/oldtube.us\/app\//g' ../index.html > index.html
 else
 	sed -e "s/dist\//http:\/\/$IP\/dist\//g" ../index.html > index.html
 fi
