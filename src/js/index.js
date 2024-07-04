@@ -1,4 +1,7 @@
+const { errorToString } = require('./util');
+
 try {
+
 
     const scripts = document.getElementsByTagName('script');
     const legacyDomain = scripts[scripts.length-1].getAttribute("src").indexOf("oldtube.us") !== -1;
@@ -16,7 +19,9 @@ try {
     require('core-js/features/object');
     require('core-js/features/function');
     require('core-js/features/array/find');
+    require('core-js/features/array/includes');
     require('core-js/features/string/includes');
+    require('core-js/features/string/replace-all');
     require('core-js/web/url');
     require('core-js/web/url-search-params');
 
@@ -73,8 +78,8 @@ try {
 
 
 } catch (err) {
-    alert(err);
+    alert(errorToString(err));
     const widgetAPI = new Common.API.Widget();
     widgetAPI.sendReadyEvent();
-    document.write("<h1>Error:" + err + "</h1>");
+    document.write("<h1>Error:" + errorToString(err) + "</h1>");
 }

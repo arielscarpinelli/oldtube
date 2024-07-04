@@ -5,7 +5,7 @@ import { errorToString } from './util';
 import 'core-js/features/set';
 import 'core-js/features/map';
 import 'regenerator-runtime/runtime';
-import ytdl from 'ytdl-core';
+import ytdl from '@distube/ytdl-core';
 
 export default class VideoPlayer extends React.PureComponent {
 
