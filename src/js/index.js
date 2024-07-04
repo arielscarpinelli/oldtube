@@ -16,6 +16,7 @@ try {
     require('core-js/features/object');
     require('core-js/features/function');
     require('core-js/features/array/find');
+    require('core-js/features/string/includes');
     require('core-js/web/url');
     require('core-js/web/url-search-params');
 

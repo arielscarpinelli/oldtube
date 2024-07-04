@@ -1,5 +1,6 @@
 const path = require('path');
 const babelLoaderExcludeNodeModulesExcept = require('babel-loader-exclude-node-modules-except');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/js/index.js',
@@ -13,7 +14,6 @@ module.exports = {
         exclude: babelLoaderExcludeNodeModulesExcept([
           'm3u8stream',
           'miniget',
-          'ytdl-core'
         ]),
         use: {
         loader: "babel-loader",
@@ -30,5 +30,10 @@ module.exports = {
     alias: {
       'url$': path.resolve(__dirname, 'src/js/url-polyfill.js'),
     }
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env.YTDL_NO_UPDATE': true
+    })
+  ]  
 };
