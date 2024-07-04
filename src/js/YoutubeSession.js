@@ -48,7 +48,7 @@ class YoutubeSession {
     }
 
     clear() {
-        ga && ga('send', 'event', 'session', 'logout');
+        gtag && gtag('event', 'session_logout');
         localStorage.removeItem(SESSION_USER_INFO);
         localStorage.removeItem(SESSION_TOKEN_KEY);
         localStorage.removeItem(SESSION_TOKEN_EXPIRE_KEY);
@@ -56,7 +56,7 @@ class YoutubeSession {
     }
 
     save(authResponse) {
-        ga && ga('send', 'event', 'session', 'login');
+        gtag && gtag('event', 'session_login');
         this._saveSessionToken(authResponse);
         localStorage.setItem(REFRESH_TOKEN_KEY, authResponse.refresh_token);
         this._retrieveUserInfo();

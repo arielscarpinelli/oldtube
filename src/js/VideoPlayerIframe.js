@@ -18,14 +18,14 @@ export default class VideoPlayerIframe extends React.Component {
     }
 
     onPlayerReady = (event) => {
-        ga && ga('send', 'event', 'video', 'unstarted');
+        gtag && gtag('event', 'video');
     };
 
     onPlayerStateChange = (event) => {
         switch (event.data) {
             case YT.PlayerState.UNSTARTED:
                 console.log("player state change: unstarted");
-                ga && ga('send', 'event', 'video', 'unstarted');
+                gtag && gtag('event', 'video');
                 break;
 
             case YT.PlayerState.ENDED:

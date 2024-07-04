@@ -37,7 +37,7 @@ export default class VideoPlayer extends React.PureComponent {
 
 	onPlayerReady = (event) => {
 		console.log("player ready");
-		ga && ga('send', 'event', 'video', 'unstarted');
+		gtag && gtag('event', 'video');
 		this.showAndUpdateProgress();
 	};
 

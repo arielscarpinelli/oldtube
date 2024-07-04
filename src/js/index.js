@@ -54,27 +54,31 @@ try {
     const firstScriptTag = document.getElementsByTagName('script')[0];
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    const gtmTag = document.createElement('script');
+    gtmTag.src = "https://www.googletagmanager.com/gtag/js?id=G-JZNXHHJWW5";
+
+    firstScriptTag.parentNode.insertBefore(gtmTag, firstScriptTag);
+
+    window.dataLayer = window.dataLayer || [];
+    
+    function gtag(){dataLayer.push(arguments);}
+    
+    gtag('js', new Date());
 
     const GA_LOCAL_STORAGE_KEY = 'ga:clientId';
 
-    ga('create', 'UA-102778294-1', {
+    gtag('config', 'G-JZNXHHJWW5', {
         'storage': 'none',
         'cookieDomain': 'none',
         'clientId': localStorage.getItem(GA_LOCAL_STORAGE_KEY)
-    });
-    ga(function(tracker) {
+    }, function(tracker) {
         const clientId = tracker.get('clientId');
         localStorage.setItem(GA_LOCAL_STORAGE_KEY, clientId);
         alert("GA clientId: " + clientId);
     });
 
-    ga('set', 'checkProtocolTask', null); // Disable file protocol checking.
-    ga('set', 'legacyDomain', legacyDomain);
-    ga('send', 'pageview');
+    // gtag('set', 'checkProtocolTask', null); // Disable file protocol checking.
+    gtag('set', 'legacyDomain', legacyDomain);
 
 
 } catch (err) {
