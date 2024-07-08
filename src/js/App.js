@@ -16,7 +16,7 @@ export default class App extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			displayUpdatePopup: false//props.legacyDomain
+			displayUpdatePopup: props.legacyDomain
 		};
 
 		this.preferences = {};
@@ -110,8 +110,8 @@ export default class App extends React.Component {
 				<MyYoutube name="My YouTube" onVideoSelected={this.onVideoSelected}/>
 				<Settings name="Settings"/>
 			</Tabs> : <Popup onClose={() => this.setState({displayUpdatePopup: false})}>
-				<p>OldTube is moving to oldtube.github.io</p>
-				<p>Please reinstall the app to keep receiving updates.</p>
+				<p>OldTube is moving!</p>
+				<p>Please visit http://oldtube.is-local.org and follow instructions to reinstall the app before Jul 18, 2024 to keep it working.</p>
 			</Popup>}
 		</div>);
 

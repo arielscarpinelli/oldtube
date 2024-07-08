@@ -3,7 +3,7 @@ a YouTube replacement app for old Samsung Smart TVs
 
 # Install
 
-Check docs at [oldtube.us](http://oldtube.us)
+Check docs at [oldtube.is-local.org](http://oldtube.is-local.org)
 
 # Develop
 

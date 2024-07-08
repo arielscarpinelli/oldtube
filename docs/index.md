@@ -67,7 +67,7 @@ There is no personal information (including access tokens, search queries, watch
 
 In order to be able to list your favourites, saved playlists, etc ("My YouTube" section) the app offers to login using your YouTube credentials. These credentials, along with any information retrieved using them is exchanged and stored only on your own TV and sent directly to YouTube API. 
 
-If you happen to install the app build distributed in the oldtube.us site, it has a Google Analytics tracking configured on it for the purpose of me knowing how much people actually use this software. Feel free to opt out by downloading the code and building your own version without GA setup if you don't agree. In no case personal information (like what you search in YT) is sent for tracking.
+If you happen to install the app build distributed in the oldtube.is-local.org site, it has a Google Analytics tracking configured on it for the purpose of me knowing how much people actually use this software. Feel free to opt out by downloading the code and building your own version without GA setup if you don't agree. In no case personal information (like what you search in YT) is sent for tracking.
 
 # Terms and Conditions
 
